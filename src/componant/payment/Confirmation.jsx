@@ -19,6 +19,11 @@ const Conformation = () => {
       pdf.save('order-confirmation.pdf');
     });
   };
+
+  const componentDyanamicTitle = () => {
+    document.title = "Ecom | Confirmation-Order-Page";
+  }
+  componentDyanamicTitle();
   const handlePrint = () => {
     window.print();
   };

@@ -483,7 +483,9 @@ main p {
   font-size: calc(10px + (24 - 16) * ((100vw - 320px) / (1200 - 320)));
 
 }
-
+title{
+  color: var(--logo-color);
+}
 .product-Card img {
   padding: 1rem;
 }

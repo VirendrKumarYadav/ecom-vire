@@ -10,6 +10,11 @@ const SinglePage = () => {
   const [cvv, setCVV] = useState('');
   const [orderPlaced, setOrderPlaced] = useState(false);
 
+  const  componentDyanamicTitle=()=> {
+    document.title = "Ecom | Order";
+  }
+  componentDyanamicTitle();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here

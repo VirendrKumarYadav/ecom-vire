@@ -10,8 +10,12 @@ const Catalog = () => {
   const dispatch=useDispatch();
   const [productlist,setProductList]=useState([]);
   let auth=useSelector((state)=>state.loginAuth.setLoginAuth)
-
   auth=sessionStorage.getItem("auth");
+
+  const  componentDyanamicTitle=()=> {
+    document.title = "Ecom | Products";
+  }
+  componentDyanamicTitle();
     // console.log(auth);
     const fetchProductsData=async ()=>{
       try {

@@ -8,8 +8,12 @@ function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
     const [username, setUsername] = useState('');
+
+    const  componentDyanamicTitle=()=> {
+        document.title = "Ecom | Signup";
+      }
+      componentDyanamicTitle();
 
     const handleRegister = async (e) => {
         e.preventDefault();

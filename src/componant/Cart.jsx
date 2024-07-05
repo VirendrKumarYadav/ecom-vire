@@ -8,6 +8,10 @@ const Cart = () => {
   const [product, setProducts] = useState(3);
   const dispatch = useDispatch();
   // const selector=useSelector();
+  const  componentDyanamicTitle=()=> {
+    document.title = "Ecom | Cart";
+  }
+  componentDyanamicTitle();
   const products = {
 
     img: "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",

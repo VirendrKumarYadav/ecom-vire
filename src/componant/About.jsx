@@ -1,6 +1,10 @@
 import React from 'react'
 
 const About = () => {
+ const  componentDyanamicTitle=()=> {
+    document.title = "Ecom | About";
+  }
+  componentDyanamicTitle();
   return (
 
     <div class="Layout_main">

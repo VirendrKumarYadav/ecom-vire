@@ -11,6 +11,10 @@ function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
    
+    const  componentDyanamicTitle=()=> {
+        document.title = "Ecom | Login";
+      }
+      componentDyanamicTitle();
 
     const dispatch = useDispatch();
     const handleLogin = async (e) => {
