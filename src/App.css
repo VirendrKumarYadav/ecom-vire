@@ -663,7 +663,7 @@ hr {
   padding: 2rem;
   background-color: var(--white-clr);
   margin-bottom: 2rem;
-  border: .5px solid;
+  border: 1px solid #dfc9b9;
 }
 
 .login-wrapper label {
