@@ -28,13 +28,9 @@ const Cart = () => {
     <div className='cart-main'>
       <div className='cart-cont-l'>
 
-
-
         <ProductCard img={products.img} amount={products.prize} title={products.title} type={products.type} removeFromCart={removeFromCart} />
         <ProductCard img={products.img} amount={products.prize} title={products.title} type={products.type} />
         <ProductCard img={products.img} amount={products.prize} title={products.title} type={products.type} />
-
-
 
       </div>
 

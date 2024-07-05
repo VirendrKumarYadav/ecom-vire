@@ -5,7 +5,7 @@ import {useNavigate }  from "react-router-dom"
 const PaymentDetails = () => {
 const navigate=useNavigate();
   const navigateToOrder=()=>{
-    navigate("/order")
+    navigate("/new-order")
   }
   return (
     <div className='payment-details-main'>
