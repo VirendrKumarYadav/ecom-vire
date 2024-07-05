@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { IoMdLogIn } from "react-icons/io";
 import Tooltip from '@mui/material/Tooltip';
 import { Button, Grid } from '@mui/material';
+import { FaLink } from "react-icons/fa6";
 
 
 const Header = () => {
@@ -54,7 +55,14 @@ const Header = () => {
                                         <Button onClick={() => { navigate("/about") }}><IoDocumentTextOutline size={30} /></Button>
                                     </Tooltip>
                                 </Grid>
-                               
+
+                                <Grid item>
+                                    <a href='https://github.com/VirendrKumarYadav/ecom-vire'>
+                                    <Tooltip title="Project Link" placement='top'>
+                                     <Button ><FaLink size={30} /></Button>
+                                    </Tooltip>
+                                    </a>
+                                </Grid>
                             </>
                         }
 
