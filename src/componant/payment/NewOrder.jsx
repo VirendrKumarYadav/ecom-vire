@@ -76,7 +76,7 @@ const navigate=useNavigate();
           </div>
 
           <div className="form-group">
-            <label htmlFor="quantity">Quantity</label>
+            <label htmlFor="quantity">No. of Product</label>
             <input
               type="number"
               id="quantity"
