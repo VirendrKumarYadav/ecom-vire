@@ -18,7 +18,7 @@ const Header = () => {
 
     useEffect(() => {
         auth = sessionStorage.getItem("auth");
-        console.log(auth);
+        // console.log(auth);
 
     }, [])
 

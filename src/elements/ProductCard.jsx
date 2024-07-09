@@ -2,7 +2,6 @@ import React from 'react'
 import "../css/new-order.css"
 const ProductCard = (prop) => {
 
-console.log(prop.key);
 
     return (
         <div className='product-card-main'>

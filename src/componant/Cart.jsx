@@ -3,11 +3,14 @@ import ProductCard from '../elements/ProductCard'
 import PaymentDetails from '../elements/PaymentDetails'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCarts } from '../redux/CatalogSlice'
+import axios from 'axios'
 
 const Cart = () => {
-  const [product, setProducts] = useState(3);
+  
+  const [cartlist,setCartList]=useState([]);
   const dispatch = useDispatch();
   // const selector=useSelector();
+ let auth=sessionStorage.getItem("auth");
   const  componentDyanamicTitle=()=> {
     document.title = "Ecom | Cart";
   }
@@ -27,6 +30,35 @@ const Cart = () => {
   const removeFromCart = () => {
 
   }
+  const fetchProductsData=async ()=>{
+    try {
+      const response =  await axios.get("http://localhost:10000/api/v1/cart",{
+        headers:{
+           Authorization:auth
+        }
+      }).then(data=>data);
+      return  response.data;
+    } catch (error) {
+      console.log(error);
+     }
+    
+  }
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const productData = await fetchProductsData();
+        setCartList(productData)
+        console.log(productData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    
+    fetchData();
+  
+  },[])
+
+
 
   return (
     <div className='cart-main'>

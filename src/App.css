@@ -485,7 +485,7 @@ main p {
 }
 title{
   color: var(--logo-color);
-}
+} 
 .product-Card img {
   padding: 1rem;
 }
@@ -810,4 +810,15 @@ h1 {
 .btn-link-sign {
   color: var(--logo-color);
   cursor: pointer;
+}
+
+.title {
+  font-size: 2rem;
+  color: #333;
+  margin: 20px 0;
+}
+
+.logo {
+  width: 100px;
+  height: auto;
 }
