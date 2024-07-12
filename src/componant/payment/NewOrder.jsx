@@ -1,20 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TimelineBar from './TimelineBar';
 import {useNavigate} from "react-router-dom"
 import "../../css/new-order.css"
 import ProductCard from '../../elements/ProductCard';
+import { useSelector } from 'react-redux';
+import Payment_table from '../../elements/Payment_table';
 
 const NewOrder = () => {
 const navigate=useNavigate();
-
+const cartItems=useSelector(state=>state.cart.carts)
+const cartTotalAmt=useSelector(state=>state.cart.cartTotal)
 const  componentDyanamicTitle=()=> {
   document.title = "Ecom | New-Order-Page";
 }
 componentDyanamicTitle();
 
-
+useEffect(()=>{
+  console.log(cartItems,cartTotalAmt);
+  
+})
   const products = {
-
     img: "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
     title: "Mens Casual Premium Slim Fit T-Shirts (x1)",
     type: "Men's clothing",
@@ -52,7 +57,7 @@ componentDyanamicTitle();
       <h1>New Order</h1>
       <TimelineBar currentStep="new-order" />
       <form onSubmit={handleSubmit}>
-
+    
         <div>
           <div className="form-group">
             <label htmlFor="customerName">Customer Name</label>
@@ -83,42 +88,32 @@ componentDyanamicTitle();
 
           <div className="form-group">
             <label htmlFor="quantity">No. of Product</label>
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              value={orderDetails.quantity}
-              onChange={handleChange}
-              min="1"
-              required
-            />
+            <p>{cartItems.length}</p>
 
           </div>
 
         </div>
-        <div className='pay-details-cont'>
-          <div className="pay-detail">
-            <label htmlFor="sub-total">Sub-total</label>
-            <p>{123}$</p>
-          </div>
-          <div className="pay-detail">
-            <label htmlFor="quantity">Taxes</label>
-            <p>{12}$</p>
-          </div>
-          <div className="pay-detail">
-            <label htmlFor="quantity">Total</label>
-            <p>{123}$</p>
-          </div>
-          <button className="order-button" type="submit">Review Order</button>
-        </div>
-
-
+        <Payment_table cartTotal={cartTotalAmt}/>
       </form>
 
       <div>
-        <ProductCard img={products.img} amount={products.prize} title={products.title} type={products.type} removeFromCart={removeFromCart} />
-        <ProductCard img={products.img} amount={products.prize} title={products.title} type={products.type} removeFromCart={removeFromCart} />
+      {cartItems.length === 0 ? (
+          <div>No products available.</div>
+        ) : (
+          cartItems.map((item, index) => (
 
+
+            <ProductCard
+              key={index}
+              id={item._id}
+              img={item.Image}
+              amount={item.price}
+              title={item.title}
+              type={item.type}
+              removeFromCart={removeFromCart}
+            />
+          ))
+        )}
 
       </div>
     </div>

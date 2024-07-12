@@ -14,7 +14,7 @@ const ViewCards = () => {
 
     const fetchProductsData = async () => {
         try {
-            const response = await axios.get("http://localhost:10000/api/v1/product/"+id, {
+            const response = await axios.get("http://localhost:10000/api/v1/product/" + id, {
                 headers: {
                     Authorization: auth
                 }
@@ -29,17 +29,49 @@ const ViewCards = () => {
         const fetchData = async () => {
             try {
                 const productData = await fetchProductsData();
-                
+
                 setProductList(productData.data)
-              
+
             } catch (error) {
                 console.log(error);
             }
         };
 
         fetchData();
-        // console.log(productlist);
+
     }, [])
+
+    const addItemToCart = async (productID, cartID) => {
+        try {
+          const response = await axios.patch(`http://localhost:10000/api/v1/cart?cartid=${cartID}`, {
+            productID: productID,
+            quantity: 1
+          }, {
+            headers: {
+              'Content-Type': 'application/json',  
+            }
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error adding item to cart:', error);
+        }
+      };
+      
+     
+
+  
+    const addToTheCart = (productId) => {
+        const cartID = '668b78bc071bfbfd4fd47fce';
+
+        addItemToCart(productId, cartID)
+        .then(data => {
+            console.log('Item added to cart:', data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+          
+    }
 
 
 
@@ -51,12 +83,16 @@ const ViewCards = () => {
                 </div>
                 <div className='view-content'>
                     <div className='view-card-name'>
-                        <span>men's clothing</span>
+                        <span>{productlist.category}</span>
+                        {/* <em>{productlist.brand}</em> */}
                         <p>{productlist.title}</p>
                     </div>
                     <div className='desc'>{productlist.description}</div>
                     <div className='view-card-prize'> ${productlist.price}</div>
-                    <button className='add-to-Cart' onClick={() => { navigate("/cart") }}>Add to Cart</button>
+                    <button className='add-to-Cart' onClick={() => {
+                        // navigate("/cart")
+                        addToTheCart(productlist._id)
+                    }}>Add to Cart</button>
                 </div>
             </div>
         </div>

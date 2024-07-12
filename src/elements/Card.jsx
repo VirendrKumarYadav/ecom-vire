@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Card = (prop) => {
+const Card = (prop,{title,img,price}) => {
   // console.log(prop.key);
   return (
     <div className='card-container'>

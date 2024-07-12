@@ -12,13 +12,11 @@ function App() {
   return (
     <div className="container">
       {/* <Container maxWidth="lg"> */}
-        <Suspense fallback={<CircularProgress />}>
+      <Suspense fallback={<CircularProgress />}>
 
-          <Provider store={store}>
-            <RouterProvider router={router}></RouterProvider>
-          </Provider>
-          {/* <Footer /> */}
-        </Suspense>
+
+        {/* <Footer /> */}
+      </Suspense>
       {/* </Container> */}
     </div>
   )

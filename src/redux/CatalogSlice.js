@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     setProducts: [],
-    setCarts: [],
+    carts: [],
 
 }
 
@@ -17,7 +17,7 @@ const catalogSlice = createSlice({
             state.setProducts = action.payload.results;
         },
         setCarts: (state, action) => {
-            state.setCarts = action.payload.results;
+            state.carts = action.payload;
         }
 
     }
