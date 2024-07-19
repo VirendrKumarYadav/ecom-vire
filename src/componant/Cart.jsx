@@ -17,7 +17,6 @@ const Cart = () => {
     document.title = "Ecom | Cart";
   }, []);
 
- 
   useEffect(() => {
     dispatch(setCarts(cartList));
     dispatch(setCartTotalAmt(cartTotal));
@@ -33,7 +32,6 @@ const Cart = () => {
       console.error(error);
     }
   };
-
   const fetchProductsByID = async (productID) => {
     try {
       const response = await axios.get(`http://localhost:10000/api/v1/product/${productID}`, {
@@ -61,14 +59,12 @@ const Cart = () => {
         const cartData = await fetchProductsData();
         const productsList = cartData.data[0].products;
         cartID = cartData.data[0];
-        
         const tempCartList = [];
 
         for (let item of productsList) {
           let res = await fetchProductsByID(item.productID);
           tempCartList.push(res.data);
         }
-        setItemList(productsList);
         setCartList(tempCartList);
         setCartTotal(cartData.data[0].cartTotal);
         
@@ -78,14 +74,10 @@ const Cart = () => {
     };
 
     fetchDataAndValidate();
-
-
   }, [auth]);
 
   const removeFromCart = (productID) => {
-    
     RemoveItemFromCart(productID);
-
   }
 
   return (

@@ -1,14 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../../css/new-order.css"
 import TimelineBar from './TimelineBar';
 import ProductCard from '../../elements/ProductCard';
 import { useNavigate } from 'react-router-dom';
+import Pay from '../../elements/Pay';
+import { useSelector } from 'react-redux';
+// import LoadCartData from '../../elements/LoadCartData';
 
 const ReviewOrder = () => {
   const navigate = useNavigate();
-
+  const [payStatus, setPayStatus] = useState(false);
+  const payDetails=useSelector((state)=>state.cart.payDetails)
+  const cartTotal=useSelector((state)=>state.cart.cartTotal)
   const componentDyanamicTitle = () => {
-    document.title = "Ecom | Review-Order-Page";
+    document.title = "Ecom | Review-Order";
   }
   componentDyanamicTitle();
 
@@ -39,9 +44,13 @@ const ReviewOrder = () => {
       [name]: value,
     });
   };
-
+useEffect(()=>{
+  console.log(payDetails);
+  
+},[])
   return (
     <div className='payment-container'>
+      {/* <LoadCartData /> */}
       <div className="review-order-container">
 
         <h1>Review Order</h1>
@@ -68,8 +77,7 @@ const ReviewOrder = () => {
 
               >{orderDetails.address}</p>
             </div>
-
-
+           
 
           </div>
           <div className='pay-details-cont'>
@@ -88,9 +96,17 @@ const ReviewOrder = () => {
             <button className="order-button" type="submit">Confirm Order</button>
           </div>
 
-
         </form>
+        <div className="form-group">
+              <label htmlFor="pay">Payment Status</label>
+              <p
+                type="text"
+                id="pay"
+                name="pay"
 
+              >{payStatus == true ? "Paid" : <Pay totalAmount={cartTotal} orderDetails={payDetails} setPayStatus={setPayStatus} />}</p>
+
+            </div>
         <div>
           <ProductCard img={products.img} amount={products.prize} title={products.title} type={products.type} removeFromCart={removeFromCart} />
           <ProductCard img={products.img} amount={products.prize} title={products.title} type={products.type} removeFromCart={removeFromCart} />

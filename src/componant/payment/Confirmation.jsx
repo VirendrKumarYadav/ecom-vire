@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import TimelineBar from './TimelineBar'
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+// import LoadCartData from '../../elements/LoadCartData';
 
 const Conformation = () => {
 
@@ -71,6 +72,7 @@ const Conformation = () => {
 
   return (
     <div className='payment-container'>
+          {/* <LoadCartData/> */}
       <div className="review-order-container" ref={confirmationContainerRef}>
 
         <h1>Order Confirmation</h1>
