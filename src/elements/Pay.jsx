@@ -21,28 +21,25 @@ function loadScript(src) {
 
 const createOrder = async () => {
   try {
-    const response = await axios.post("http://localhost:10000/api/v1/order/create-order",
-      {
-        amount: 1000,
-        currency: 'INR',
-        receipt: 'receipt#1',
-        notes: {
-          name: "virendra",
-          email: "gaurav.kumar@example.com",
-          contact: "9000090000",
-        }
+    var instance = new Razorpay({ key_id: 'YOUR_KEY_ID', key_secret: 'YOUR_SECRET' })
+
+    instance.orders.create({
+      amount: 50000,
+      currency: "INR",
+      receipt: "receipt#1",
+      notes: {
+        key1: "value3",
+        key2: "value2"
       }
-    );
-    return response.data;
-
-
+    })
+    return instance;
 
   } catch (error) {
     console.error('Error creating order:', error);
   };
 };
 
-function Pay(prop) {
+function Pay({totalAmount,orderDetails,setPayStatus,orderid}) {
 
   // let order = createOrder();
 
@@ -58,17 +55,17 @@ function Pay(prop) {
     const options = {
       // key: 'rzp_test_f46yvGgKgeMnZH', // Enter the Key ID generated from the Dashboard
       key: 'rzp_test_yoPptvw6dEHh0e',
-      amount: 1000, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      amount: totalAmount*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: 'INR',
       name: 'Ecom Corp Pvt. Ltd.',
       description: 'Test Transaction for order',
       image: logo,
-      order_id: "order_OZCgNjJe89XX6j",
+      order_id: orderid,
       // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       callback_url: 'http://localhost:5173/review-order',
       prefill: {
-        name: "Virendra",
-        email: "gaurav.kumar@example.com",
+        name: orderDetails.name,
+        email: "vy.y@example.com",
         contact: "9000090000",
 
       },
@@ -84,7 +81,7 @@ function Pay(prop) {
 
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
-    prop.setPayStatus(true);
+    setPayStatus(true);
   }
 
   return (

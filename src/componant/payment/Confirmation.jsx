@@ -1,10 +1,17 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import TimelineBar from './TimelineBar'
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import axios from 'axios';
+import ProductCard from '../../elements/ProductCard';
 // import LoadCartData from '../../elements/LoadCartData';
 
 const Conformation = () => {
+  const [orderdata, setOrderData] = useState({});
+  let orderdetails = JSON.parse(sessionStorage.getItem("order-details"));
+  let order=JSON.parse(sessionStorage.getItem('orders'))
+  const [cartList, setCartList] = useState([]);
+  const auth = sessionStorage.getItem("auth");
 
 
   const confirmationContainerRef = useRef(null);
@@ -28,16 +35,25 @@ const Conformation = () => {
   const handlePrint = () => {
     window.print();
   };
-  const downloadPdf = (pdfData) => {
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(
-      new Blob([pdfData], { type: "application/pdf" })
-    );
-    link.download = "order-confirmation.pdf";
-    link.click();
-    document.body.removeChild(link);
-  };
+  // const downloadPdf = (pdfData) => {
+  //   const link = document.createElement("a");
+  //   link.href = URL.createObjectURL(
+  //     new Blob([pdfData], { type: "application/pdf" })
+  //   );
+  //   link.download = "order-confirmation.pdf";
+  //   link.click();
+  //   document.body.removeChild(link);
+  // };
+  const getOrderDetails = async ( email) => {
+    try {
+      const response = await axios.get(`http://localhost:10000/api/v1/order/order-all/${email}`, 
 
+      )
+      return response;
+    } catch (error) {
+      console.error('Error getting order:', error);
+    };
+  };
 
   const handleDownloadPdf = () => {
 
@@ -66,13 +82,74 @@ const Conformation = () => {
     zip: '12345',
     country: 'USA',
   };
+  const fetchProductsData = async (auth) => {
+    try {
+      const response = await axios.get("http://localhost:10000/api/v1/cart", {
+        headers: { Authorization: auth }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchProductsByID = async (productID, auth) => {
+    try {
+      const response = await axios.get(`http://localhost:10000/api/v1/product/${productID}`, {
+        headers: { Authorization: auth }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchDataAndValidate = async () => {
+      try {
+        const cartData = await fetchProductsData(auth);
+        const productsList = cartData.data[0].products;
+        const tempCartList = [];
+
+        for (let item of productsList) {
+          let res = await fetchProductsByID(item.productID, auth);
+          tempCartList.push(res);
+        }
+        setCartList(tempCartList);
+        setCartTotal(cartData.data[0].cartTotal);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDataAndValidate();
+  
+  }, [auth]);
+
+const removeFromCart=()=>{
+  
+}
 
   const shippingMethod = 'Standard Shipping';
   const supportEmail = 'support@example.com';
+  const handleSubmit = async () => {
+   
+    try {
+        const orders = await getOrderDetails("yy686811@gmail.com");
+        setOrderData(orders.data);
+        sessionStorage.setItem('orders', JSON.stringify(orders.data));
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+    }
+};
+  useEffect(() => {
 
+    handleSubmit();
+    console.log(orderdata)
+  }, [])
   return (
     <div className='payment-container'>
-          {/* <LoadCartData/> */}
+      {/* <LoadCartData/> */}
       <div className="review-order-container" ref={confirmationContainerRef}>
 
         <h1>Order Confirmation</h1>
@@ -89,22 +166,23 @@ const Conformation = () => {
             <h2>Order Details</h2>
             <table>
               <tbody>
+              <tr>
+                  <td>Customer Name:</td>
+                  <td>
+                    <strong>{order.orderDetails.name}</strong>
+                  </td>
+                </tr>
                 <tr>
                   <td>Order ID:</td>
                   <td>
-                    <strong>{orderDetails.orderId}</strong>
+                    <strong>{order.orderid}</strong>
                   </td>
                 </tr>
-                <tr>
-                  <td>Order Date:</td>
-                  <td>
-                    <strong>{orderDetails.orderDate}</strong>
-                  </td>
-                </tr>
+                
                 <tr>
                   <td>Total Amount:</td>
                   <td>
-                    <strong>${orderDetails.totalAmount}</strong>
+                    <strong>${order.amount}</strong>
                   </td>
                 </tr>
               </tbody>
@@ -114,11 +192,22 @@ const Conformation = () => {
           <div className="product-details">
             <h2>Products Ordered</h2>
             <ul>
-              {products.map((product) => (
-                <li key={product.id}>
-                  <strong>{product.title}</strong> - Qty: {product.quantity}
-                </li>
-              ))}
+            {cartList.length === 0 ? (
+              <div>No products available.</div>
+            ) : (
+              cartList.map((item, index) => (
+                <ProductCard
+                  key={index}
+                  id={item.data._id}
+                  img={item.data.Image}
+                  amount={item.data.price}
+                  title={item.data.title}
+                  type={item.data.type}
+                  removeFromCart={removeFromCart}
+                  removeBtn={false}
+                />
+              ))
+            )}
             </ul>
           </div>
 
@@ -127,11 +216,9 @@ const Conformation = () => {
             <p>
               <strong>Shipping Address:</strong>
               <br />
-              {shippingAddress.name}
+              {orderdetails.customerName}
               <br />
-              {shippingAddress.address1}
-              <br />
-              {shippingAddress.address2}
+              {orderdetails.address}
               <br />
               {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zip}
               <br />
@@ -153,11 +240,11 @@ const Conformation = () => {
               our customer support team at{' '}
               <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
             </p>
-            <div className='confirm-btn'><button className="order-button" onClick={handleDownloadPdf}>Download Recipt.</button></div>
 
           </div>
 
         </div>
+        <div className='confirm-btn'><button className="order-button" onClick={handleDownloadPdf}>Download Recipt.</button></div>
 
       </div>
     </div>

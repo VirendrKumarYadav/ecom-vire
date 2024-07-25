@@ -21,6 +21,7 @@ const Payment_table = ({ cartTotal, orderDetails }) => {
     setPaymentDataVal();
   }, [cartTotal])
 
+
   return (
     <>
       <div className='pay-details-cont'>

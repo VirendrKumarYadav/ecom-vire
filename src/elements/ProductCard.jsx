@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import "../css/new-order.css"
-const ProductCard = ({ id, img, amount, title, type, removeFromCart }) => {
+const ProductCard = ({ id, img, amount, title, type, removeFromCart ,removeBtn}) => {
 
     const [qty, setQty] = useState(1)
 
@@ -35,8 +35,12 @@ const ProductCard = ({ id, img, amount, title, type, removeFromCart }) => {
                     <h4>{amount}</h4>
                 </div>
                 <div className='remove-btn'>
-
-                    <button onClick={() => removeFromCart(id)}>Remove</button>
+                    {
+                        removeBtn==true?
+                        <button onClick={() => removeFromCart(id)}>Remove</button>
+                        :""
+                    }
+                    
                 </div>
             </div>
             <hr></hr>

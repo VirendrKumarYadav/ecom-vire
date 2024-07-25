@@ -5,7 +5,7 @@ import "../../css/new-order.css";
 import ProductCard from '../../elements/ProductCard';
 import { useSelector, useDispatch } from 'react-redux';
 import Payment_table from '../../elements/Payment_table';
-import { setCarts, setCartTotalAmt, setPayDetails } from '../../redux/CartSlice';
+import { setCarts, setCartTotalAmt, setOrderCrateID, setPayDetails } from '../../redux/CartSlice';
 import axios from 'axios';
 
 const NewOrder = () => {
@@ -14,6 +14,7 @@ const NewOrder = () => {
   const [cartList, setCartList] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
   const auth = sessionStorage.getItem("auth");
+
 
   const componentDyanamicTitle = () => {
     document.title = "Ecom | New-Order-Page";
@@ -84,19 +85,21 @@ const NewOrder = () => {
     RemoveItemFromCart(productID);
   };
 
+  // -------create the order -------------
 
   const createOrderD = async () => {
 
     try {
       const response = await axios.post("http://localhost:10000/api/v1/order/create-order",
         {
-          amount: 1000,
+          amount: (cartTotal + (cartTotal * 5) / 100).toFixed(0),
           currency: 'INR',
           receipt: 'receipt#1',
           notes: {
-            name: "virendra",
-            email: "gaurav.kumar@example.com",
-            contact: "9000090000",
+            name: orderDetails.customerName,
+            email: orderDetails.email,
+            contact: orderDetails.contact,
+            address:orderDetails.address
           }
         }
       );
@@ -110,8 +113,7 @@ const NewOrder = () => {
     address: '',
     contact: '',
     email: '',
-    quantity: 1,
-    orderid: ""
+
   });
 
   const handleChange = (e) => {
@@ -126,17 +128,17 @@ const NewOrder = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Order submitted:', orderDetails);
-    navigate("/review-order");
-    // Add logic to handle order submission (e.g., API call)
+    sessionStorage.setItem("order-details", JSON.stringify(orderDetails));
+
     try {
       const createOrder = createOrderD();
-      orderDetails.orderid = createOrder.id
-      dispatch(setPayDetails(orderDetails));
+      const orderid = createOrder.id
+      dispatch(setOrderCrateID(orderid));
     } catch (error) {
       console.log(error);
 
     }
-
+    navigate("/review-order");
   };
 
   return (
@@ -212,6 +214,7 @@ const NewOrder = () => {
                   title={item.data.title}
                   type={item.data.type}
                   removeFromCart={removeFromCart}
+                  removeBtn={true}
                 />
               ))
             )}
